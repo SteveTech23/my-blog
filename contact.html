@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Contact Me</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <main>
+    <section class="intro scroll-fade">
+      <h2>📬 Contact Me</h2>
+      <p>Have a question, idea, or want to collaborate? Drop me a message!</p>
+    </section>
+
+    <section class="contact-form scroll-fade">
+      <form action="#" method="POST">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required />
+
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required />
+
+        <label for="message">Message:</label>
+        <textarea id="message" name="message" rows="5" required></textarea>
+
+        <button type="submit">Send Message</button>
+      </form>
+    </section>
+  </main>
+
+  <!-- Dark Mode + Back to Top -->
+  <button id="darkToggle" class="toggle-btn">🌙 Dark Mode</button>
+  <button id="backToTop" class="top-btn">⬆ Back to Top</button>
+
+  <script src="script.js"></script>
+</body>
+</html>
