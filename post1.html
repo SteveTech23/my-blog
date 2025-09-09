@@ -424,4 +424,111 @@
         </div>
 
         <p>I'm still learning daily, and this blog will document every step. 💻🔧</p>
-      </section
+      </section>
+
+      <!-- Post Navigation -->
+      <div class="post-nav">
+        <a href="posts.html" class="nav-btn"><i class="fas fa-arrow-left"></i> All Posts</a>
+        <a href="post2.html" class="nav-btn">Next Post <i class="fas fa-arrow-right"></i></a>
+      </div>
+    </main>
+
+    <!-- DARK MODE TOGGLE -->
+    <button id="darkToggle" class="toggle-btn">🌙 Dark Mode</button>
+
+    <!-- BACK TO TOP BUTTON -->
+    <button id="backToTop" class="top-btn">⬆ Back to Top</button>
+
+    <!-- FOOTER -->
+    <footer>
+      <p>© 2025 Steven Msowoya | All Rights Reserved</p>
+      <div class="social-links">
+        <a href="#"><i class="fab fa-twitter"></i></a>
+        <a href="#"><i class="fab fa-github"></i></a>
+        <a href="#"><i class="fab fa-linkedin"></i></a>
+      </div>
+    </footer>
+  </div>
+
+  <!-- SCRIPT -->
+  <script>
+    // DOM Elements
+    const darkToggle = document.getElementById('darkToggle');
+    const backToTop = document.getElementById('backToTop');
+    const scrollElements = document.querySelectorAll('.scroll-fade');
+    
+    // Check for saved theme preference or respect OS preference
+    if (localStorage.getItem('theme') === 'dark' || 
+        (window.matchMedia('(prefers-color-scheme: dark)').matches && !localStorage.getItem('theme'))) {
+      document.documentElement.setAttribute('data-theme', 'dark');
+      darkToggle.textContent = '☀️ Light Mode';
+    } else {
+      document.documentElement.setAttribute('data-theme', 'light');
+      darkToggle.textContent = '🌙 Dark Mode';
+    }
+    
+    // Toggle Dark/Light Mode
+    darkToggle.addEventListener('click', () => {
+      const currentTheme = document.documentElement.getAttribute('data-theme');
+      const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+      
+      document.documentElement.setAttribute('data-theme', newTheme);
+      localStorage.setItem('theme', newTheme);
+      
+      darkToggle.textContent = newTheme === 'dark' ? '☀️ Light Mode' : '🌙 Dark Mode';
+    });
+    
+    // Back to Top Button
+    window.addEventListener('scroll', () => {
+      if (window.pageYOffset > 300) {
+        backToTop.classList.add('visible');
+      } else {
+        backToTop.classList.remove('visible');
+      }
+    });
+    
+    backToTop.addEventListener('click', () => {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    });
+    
+    // Scroll Animations
+    const elementInView = (el, scrollOffset = 0) => {
+      const elementTop = el.getBoundingClientRect().top;
+      return (
+        elementTop <= 
+        ((window.innerHeight || document.documentElement.clientHeight) * (scrollOffset / 100))
+      );
+    };
+    
+    const displayScrollElement = (element) => {
+      element.classList.add('visible');
+    };
+    
+    const hideScrollElement = (element) => {
+      element.classList.remove('visible');
+    };
+    
+    const handleScrollAnimation = () => {
+      scrollElements.forEach((el) => {
+        if (elementInView(el, 85)) {
+          displayScrollElement(el);
+        } else {
+          hideScrollElement(el);
+        }
+      });
+    };
+    
+    window.addEventListener('scroll', () => {
+      handleScrollAnimation();
+    });
+    
+    // Initialize scroll animations on page load
+    document.addEventListener('DOMContentLoaded', () => {
+      handleScrollAnimation();
+    });
+  </script>
+</body>
+</html> 
