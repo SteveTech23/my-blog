@@ -4,43 +4,492 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>About - Steven's Blog</title>
-  <link rel="stylesheet" href="Style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    /* CSS Variables for Theming */
+    :root {
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
+      --secondary: #7e22ce;
+      --accent: #f97316;
+      --text: #1f2937;
+      --text-light: #6b7280;
+      --bg: #ffffff;
+      --bg-secondary: #f8fafc;
+      --card-bg: #ffffff;
+      --shadow: rgba(0, 0, 0, 0.1);
+      --shadow-hover: rgba(0, 0, 0, 0.15);
+      --transition: all 0.3s ease;
+      --radius: 12px;
+      --max-width: 1000px;
+    }
+
+    /* Dark Theme Variables */
+    [data-theme="dark"] {
+      --primary: #3b82f6;
+      --primary-dark: #2563eb;
+      --secondary: #a855f7;
+      --accent: #fb923c;
+      --text: #f3f4f6;
+      --text-light: #d1d5db;
+      --bg: #111827;
+      --bg-secondary: #1f2937;
+      --card-bg: #1a2434;
+      --shadow: rgba(0, 0, 0, 0.25);
+      --shadow-hover: rgba(0, 0, 0, 0.35);
+    }
+
+    /* Base Styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      line-height: 1.6;
+      color: var(--text);
+      background-color: var(--bg);
+      transition: var(--transition);
+      padding: 2rem 1rem;
+    }
+
+    /* Typography */
+    h1, h2, h3, h4, h5, h6 {
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: 1rem;
+      color: var(--text);
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    h2 {
+      font-size: 2rem;
+      margin-bottom: 1.5rem;
+      color: var(--primary);
+    }
+
+    h3 {
+      font-size: 1.5rem;
+      margin-bottom: 1.2rem;
+      color: var(--primary);
+    }
+
+    p {
+      margin-bottom: 1rem;
+    }
+
+    a {
+      color: var(--primary);
+      text-decoration: none;
+      transition: var(--transition);
+    }
+
+    a:hover {
+      color: var(--primary-dark);
+    }
+
+    /* Layout */
+    .container {
+      max-width: var(--max-width);
+      margin: 0 auto;
+    }
+
+    main {
+      padding: 2rem 0;
+    }
+
+    section {
+      margin-bottom: 3rem;
+    }
+
+    /* Intro Section */
+    .intro {
+      text-align: center;
+      padding: 3rem 2rem;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+      color: white;
+      border-radius: var(--radius);
+      margin-bottom: 3rem;
+    }
+
+    .intro h2 {
+      color: white;
+      font-size: 2.5rem;
+    }
+
+    .intro p {
+      font-size: 1.2rem;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* About Section */
+    .about-section {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      padding: 2rem;
+      box-shadow: 0 4px 6px var(--shadow);
+      transition: var(--transition);
+      margin-bottom: 2rem;
+    }
+
+    .about-section:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px var(--shadow-hover);
+    }
+
+    /* Profile Image */
+    .profile-img {
+      width: 100%;
+      max-width: 500px;
+      height: auto;
+      border-radius: var(--radius);
+      box-shadow: 0 8px 16px var(--shadow);
+      display: block;
+      margin: 0 auto 1rem;
+      transition: var(--transition);
+    }
+
+    .profile-img:hover {
+      transform: scale(1.02);
+      box-shadow: 0 12px 24px var(--shadow-hover);
+    }
+
+    .img-caption {
+      text-align: center;
+      font-style: italic;
+      color: var(--text-light);
+      margin-bottom: 2rem;
+    }
+
+    /* Skills Section */
+    .skills-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+
+    .skill-category {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      box-shadow: 0 4px 6px var(--shadow);
+    }
+
+    .skill-category h4 {
+      color: var(--primary);
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .skill-list {
+      list-style: none;
+    }
+
+    .skill-list li {
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--bg-secondary);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .skill-list li:last-child {
+      border-bottom: none;
+    }
+
+    .skill-list i {
+      color: var(--accent);
+    }
+
+    /* Buttons */
+    .toggle-btn, .top-btn {
+      position: fixed;
+      padding: 0.75rem 1.5rem;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      font-weight: 600;
+      box-shadow: 0 4px 6px var(--shadow);
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      z-index: 999;
+    }
+
+    .toggle-btn:hover, .top-btn:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px var(--shadow-hover);
+    }
+
+    .toggle-btn {
+      bottom: 2rem;
+      right: 2rem;
+    }
+
+    .top-btn {
+      bottom: 2rem;
+      left: 2rem;
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    .top-btn.visible {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 2rem;
+      margin-top: 4rem;
+      color: var(--text-light);
+      background: var(--bg-secondary);
+      border-radius: var(--radius);
+    }
+
+    .social-links {
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      margin-top: 1rem;
+    }
+
+    .social-links a {
+      color: var(--text-light);
+      font-size: 1.5rem;
+      transition: var(--transition);
+    }
+
+    .social-links a:hover {
+      color: var(--primary);
+    }
+
+    /* Animations */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .scroll-fade {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .scroll-fade.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 2rem;
+      }
+      
+      h2 {
+        font-size: 1.75rem;
+      }
+      
+      h3 {
+        font-size: 1.3rem;
+      }
+      
+      .intro {
+        padding: 2rem 1rem;
+      }
+      
+      .intro h2 {
+        font-size: 2rem;
+      }
+      
+      .toggle-btn, .top-btn {
+        padding: 0.6rem 1.2rem;
+        font-size: 0.9rem;
+      }
+      
+      .skills-container {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
 </head>
 <body>
+  <div class="container">
+    <!-- PAGE HEADING -->
+    <header>
+      <h1>About Steven</h1>
+    </header>
 
-  <!-- MAIN -->
-  <main>
-    <section class="intro scroll-fade">
-      <h2>Hi, I'm Steven Msowoya 👨‍💻</h2>
-      <p>I’m an aspiring IT Support Specialist and Web Developer based in Malawi. I love solving tech problems, building clean websites, and helping others learn technology.</p>
-    </section>
+    <!-- MAIN CONTENT -->
+    <main>
+      <section class="intro scroll-fade">
+        <h2>Hi, I'm Steven Msowoya 👨‍💻</h2>
+        <p>I'm an aspiring IT Support Specialist and Web Developer based in Malawi. I love solving tech problems, building clean websites, and helping others learn technology.</p>
+      </section>
 
-    <section class="about-section scroll-fade">
-      <h3>My Tech Journey 🚀</h3>
-      <p>I studied Computing and Information Systems, earned NCC Diplomas (Level 4 & 5), and now I'm building real-world projects while job hunting. I’m focused on IT support, networking, and front-end development using HTML, CSS, JavaScript, and PHP.</p>
-    </section>
+      <section class="about-section scroll-fade">
+        <h3>My Tech Journey 🚀</h3>
+        <p>I studied Computing and Information Systems, earned NCC Diplomas (Level 4 & 5), and now I'm building real-world projects while job hunting. I'm focused on IT support, networking, and front-end development using HTML, CSS, JavaScript, and PHP.</p>
+        
+        <div class="skills-container">
+          <div class="skill-category">
+            <h4><i class="fas fa-laptop-code"></i> Web Development</h4>
+            <ul class="skill-list">
+              <li><i class="fas fa-check-circle"></i> HTML/CSS</li>
+              <li><i class="fas fa-check-circle"></i> JavaScript</li>
+              <li><i class="fas fa-check-circle"></i> PHP</li>
+              <li><i class="fas fa-check-circle"></i> React</li>
+            </ul>
+          </div>
+          
+          <div class="skill-category">
+            <h4><i class="fas fa-network-wired"></i> IT & Networking</h4>
+            <ul class="skill-list">
+              <li><i class="fas fa-check-circle"></i> IT Support</li>
+              <li><i class="fas fa-check-circle"></i> Network Administration</li>
+              <li><i class="fas fa-check-circle"></i> Troubleshooting</li>
+              <li><i class="fas fa-check-circle"></i> System Maintenance</li>
+            </ul>
+          </div>
+          
+          <div class="skill-category">
+            <h4><i class="fas fa-graduation-cap"></i> Education</h4>
+            <ul class="skill-list">
+              <li><i class="fas fa-certificate"></i> Computing & Information Systems</li>
+              <li><i class="fas fa-certificate"></i> NCC Level 4 Diploma</li>
+              <li><i class="fas fa-certificate"></i> NCC Level 5 Diploma</li>
+              <li><i class="fas fa-certificate"></i> Ongoing Skill Development</li>
+            </ul>
+          </div>
+        </div>
+      </section>
 
-    <!-- PROFILE IMAGE -->
-    <section class="scroll-fade">
-      <img src="images/image_1753965493631.jpg" alt="Steven Profile" class="profile-img" />
-      <p class="img-caption">That's me — passionate about tech and always learning!</p>
-    </section>
+      <!-- PROFILE IMAGE -->
+      <section class="scroll-fade">
+        <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80" alt="Steven Profile" class="profile-img" />
+        <p class="img-caption">That's me — passionate about tech and always learning!</p>
+      </section>
 
-    <!-- ACTION IMAGE -->
-    <section class="scroll-fade">
-      <img src="images/IMG_20250205_121918_421~2.jpg" alt="Steven Working" class="profile-img" />
-      <p class="img-caption">Working on projects and solving real IT problems.</p>
-    </section>
-  </main>
+      <!-- ACTION IMAGE -->
+      <section class="scroll-fade">
+        <img src="https://images.unsplash.com/photo-1581091226033-d5c48150dbaa?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80" alt="Steven Working" class="profile-img" />
+        <p class="img-caption">Working on projects and solving real IT problems.</p>
+      </section>
+    </main>
 
-  <!-- DARK MODE TOGGLE -->
-  <button id="darkToggle" class="toggle-btn">🌙 Dark Mode</button>
+    <!-- DARK MODE TOGGLE -->
+    <button id="darkToggle" class="toggle-btn">🌙 Dark Mode</button>
 
-  <!-- BACK TO TOP BUTTON -->
-  <button id="backToTop" class="top-btn">⬆ Back to Top</button>
+    <!-- BACK TO TOP BUTTON -->
+    <button id="backToTop" class="top-btn">⬆ Back to Top</button>
 
-  <script src="Script.js"></script>
+    <!-- FOOTER -->
+    <footer>
+      <p>© 2025 Steven Msowoya | All Rights Reserved</p>
+      <div class="social-links">
+        <a href="#"><i class="fab fa-twitter"></i></a>
+        <a href="#"><i class="fab fa-github"></i></a>
+        <a href="#"><i class="fab fa-linkedin"></i></a>
+      </div>
+    </footer>
+  </div>
+
+  <!-- SCRIPT -->
+  <script>
+    // DOM Elements
+    const darkToggle = document.getElementById('darkToggle');
+    const backToTop = document.getElementById('backToTop');
+    const scrollElements = document.querySelectorAll('.scroll-fade');
+    
+    // Check for saved theme preference or respect OS preference
+    if (localStorage.getItem('theme') === 'dark' || 
+        (window.matchMedia('(prefers-color-scheme: dark)').matches && !localStorage.getItem('theme'))) {
+      document.documentElement.setAttribute('data-theme', 'dark');
+      darkToggle.textContent = '☀️ Light Mode';
+    } else {
+      document.documentElement.setAttribute('data-theme', 'light');
+      darkToggle.textContent = '🌙 Dark Mode';
+    }
+    
+    // Toggle Dark/Light Mode
+    darkToggle.addEventListener('click', () => {
+      const currentTheme = document.documentElement.getAttribute('data-theme');
+      const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+      
+      document.documentElement.setAttribute('data-theme', newTheme);
+      localStorage.setItem('theme', newTheme);
+      
+      darkToggle.textContent = newTheme === 'dark' ? '☀️ Light Mode' : '🌙 Dark Mode';
+    });
+    
+    // Back to Top Button
+    window.addEventListener('scroll', () => {
+      if (window.pageYOffset > 300) {
+        backToTop.classList.add('visible');
+      } else {
+        backToTop.classList.remove('visible');
+      }
+    });
+    
+    backToTop.addEventListener('click', () => {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    });
+    
+    // Scroll Animations
+    const elementInView = (el, scrollOffset = 0) => {
+      const elementTop = el.getBoundingClientRect().top;
+      return (
+        elementTop <= 
+        ((window.innerHeight || document.documentElement.clientHeight) * (scrollOffset / 100))
+      );
+    };
+    
+    const displayScrollElement = (element) => {
+      element.classList.add('visible');
+    };
+    
+    const hideScrollElement = (element) => {
+      element.classList.remove('visible');
+    };
+    
+    const handleScrollAnimation = () => {
+      scrollElements.forEach((el) => {
+        if (elementInView(el, 85)) {
+          displayScrollElement(el);
+        } else {
+          hideScrollElement(el);
+        }
+      });
+    };
+    
+    window.addEventListener('scroll', () => {
+      handleScrollAnimation();
+    });
+    
+    // Initialize scroll animations on page load
+    document.addEventListener('DOMContentLoaded', () => {
+      handleScrollAnimation();
+    });
+  </script>
 </body>
 </html>
-
-
