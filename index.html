@@ -4,20 +4,391 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Steven's Blog</title>
-  <link rel="stylesheet" href="Style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    /* CSS Variables for Theming */
+    :root {
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
+      --secondary: #7e22ce;
+      --accent: #f97316;
+      --text: #1f2937;
+      --text-light: #6b7280;
+      --bg: #ffffff;
+      --bg-secondary: #f8fafc;
+      --card-bg: #ffffff;
+      --header-bg: rgba(255, 255, 255, 0.95);
+      --shadow: rgba(0, 0, 0, 0.1);
+      --shadow-hover: rgba(0, 0, 0, 0.15);
+      --transition: all 0.3s ease;
+      --radius: 12px;
+      --max-width: 1200px;
+    }
+
+    /* Dark Theme Variables */
+    [data-theme="dark"] {
+      --primary: #3b82f6;
+      --primary-dark: #2563eb;
+      --secondary: #a855f7;
+      --accent: #fb923c;
+      --text: #f3f4f6;
+      --text-light: #d1d5db;
+      --bg: #111827;
+      --bg-secondary: #1f2937;
+      --card-bg: #1a2434;
+      --header-bg: rgba(17, 24, 39, 0.95);
+      --shadow: rgba(0, 0, 0, 0.25);
+      --shadow-hover: rgba(0, 0, 0, 0.35);
+    }
+
+    /* Base Styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      line-height: 1.6;
+      color: var(--text);
+      background-color: var(--bg);
+      transition: var(--transition);
+      padding-top: 80px;
+    }
+
+    /* Typography */
+    h1, h2, h3, h4, h5, h6 {
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: 1rem;
+      color: var(--text);
+    }
+
+    h1 {
+      font-size: 2.5rem;
+    }
+
+    h2 {
+      font-size: 2rem;
+      margin-bottom: 1.5rem;
+    }
+
+    p {
+      margin-bottom: 1rem;
+    }
+
+    a {
+      color: var(--primary);
+      text-decoration: none;
+      transition: var(--transition);
+    }
+
+    a:hover {
+      color: var(--primary-dark);
+    }
+
+    /* Layout */
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background: var(--header-bg);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 4px 12px var(--shadow);
+      z-index: 1000;
+      padding: 1rem 0;
+    }
+
+    .header-container {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 0 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    /* Desktop Navigation */
+    .desktop-nav {
+      display: flex;
+      gap: 2rem;
+    }
+
+    .desktop-nav a {
+      font-weight: 500;
+      color: var(--text);
+      position: relative;
+    }
+
+    .desktop-nav a::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--primary);
+      transition: var(--transition);
+    }
+
+    .desktop-nav a:hover::after {
+      width: 100%;
+    }
+
+    /* Hamburger Menu */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      justify-content: space-around;
+      width: 2rem;
+      height: 2rem;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+      z-index: 10;
+    }
+
+    .hamburger span {
+      width: 2rem;
+      height: 0.25rem;
+      background: var(--text);
+      border-radius: 10px;
+      transition: var(--transition);
+      position: relative;
+      transform-origin: 1px;
+    }
+
+    .mobile-nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100vh;
+      background: var(--bg);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 2rem;
+      z-index: 5;
+      transition: var(--transition);
+      transform: translateX(-100%);
+    }
+
+    .mobile-nav.active {
+      transform: translateX(0);
+    }
+
+    .mobile-nav a {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--text);
+      transition: var(--transition);
+    }
+
+    .mobile-nav a:hover {
+      color: var(--primary);
+    }
+
+    main {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    section {
+      margin-bottom: 3rem;
+    }
+
+    /* Intro Section */
+    .intro {
+      text-align: center;
+      padding: 3rem 2rem;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+      color: white;
+      border-radius: var(--radius);
+      margin-bottom: 3rem;
+    }
+
+    .intro h2 {
+      color: white;
+      font-size: 2.5rem;
+    }
+
+    .intro p {
+      font-size: 1.2rem;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* Post Cards */
+    .post {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      padding: 2rem;
+      box-shadow: 0 4px 6px var(--shadow);
+      transition: var(--transition);
+      margin-bottom: 2rem;
+      border-left: 4px solid var(--accent);
+    }
+
+    .post:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px var(--shadow-hover);
+    }
+
+    .post h2 {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .post p:last-child {
+      margin-bottom: 0;
+    }
+
+    /* Buttons */
+    .toggle-btn, .top-btn {
+      position: fixed;
+      padding: 0.75rem 1.5rem;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      font-weight: 600;
+      box-shadow: 0 4px 6px var(--shadow);
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      z-index: 999;
+    }
+
+    .toggle-btn:hover, .top-btn:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px var(--shadow-hover);
+    }
+
+    .toggle-btn {
+      bottom: 2rem;
+      right: 2rem;
+    }
+
+    .top-btn {
+      bottom: 2rem;
+      left: 2rem;
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    .top-btn.visible {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 2rem;
+      margin-top: 4rem;
+      color: var(--text-light);
+      background: var(--bg-secondary);
+    }
+
+    /* Animations */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .scroll-fade {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .scroll-fade.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      body {
+        padding-top: 70px;
+      }
+      
+      .header-container {
+        padding: 0 1rem;
+      }
+      
+      .desktop-nav {
+        display: none;
+      }
+      
+      .hamburger {
+        display: flex;
+      }
+      
+      h1 {
+        font-size: 2rem;
+      }
+      
+      h2 {
+        font-size: 1.75rem;
+      }
+      
+      .intro {
+        padding: 2rem 1rem;
+      }
+      
+      .intro h2 {
+        font-size: 2rem;
+      }
+      
+      .toggle-btn, .top-btn {
+        padding: 0.6rem 1.2rem;
+        font-size: 0.9rem;
+      }
+      
+      main {
+        padding: 1rem;
+      }
+    }
+  </style>
 </head>
 <body>
 
   <!-- HEADER -->
   <header>
-    <h1>Welcome to My Blog</h1>
-    <nav>
-      <a href="index.html">Home</a>
-      <a href="about.html">About</a>
-      <a href="posts.html">Posts</a>
-      <a href="contact.html">Contact</a>
-    </nav>
+    <div class="header-container">
+      <h1>Steven's Blog</h1>
+      <nav class="desktop-nav">
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="Posts.html">Posts</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+      <button class="hamburger" id="hamburger">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
   </header>
+
+  <!-- Mobile Navigation -->
+  <nav class="mobile-nav" id="mobileNav">
+    <a href="index.html">Home</a>
+    <a href="about.html">About</a>
+    <a href="Posts.html">Posts</a>
+    <a href="contact.html">Contact</a>
+  </nav>
 
   <!-- MAIN CONTENT -->
   <main>
@@ -30,11 +401,21 @@
       <h2>📌 First Blog Post</h2>
       <p><strong>Date:</strong> August 4, 2025</p>
       <p>This is my first blog post. I'll be sharing tips, tutorials, and thoughts on tech and personal growth. Stay tuned!</p>
+      <a href="#" class="read-more">Read more →</a>
     </section>
 
     <section class="post scroll-fade">
-      <h2>💡 Coming Soon: My Learning Path</h2>
-      <p>I’ll write about my experience learning IT support, networking, and building real-world projects.</p>
+      <h2>💡 My Learning Path in Web Development</h2>
+      <p><strong>Date:</strong> July 28, 2025</p>
+      <p>I've been diving deep into React, Node.js, and modern CSS frameworks. The journey has been challenging but incredibly rewarding.</p>
+      <a href="#" class="read-more">Read more →</a>
+    </section>
+
+    <section class="post scroll-fade">
+      <h2>🚀 Building My First Full-Stack Application</h2>
+      <p><strong>Date:</strong> July 20, 2025</p>
+      <p>I recently completed my first full-stack application using the MERN stack. Here's what I learned from the experience.</p>
+      <a href="#" class="read-more">Read more →</a>
     </section>
   </main>
 
@@ -47,9 +428,127 @@
   <!-- FOOTER -->
   <footer>
     <p>© 2025 Steven Msowoya | All Rights Reserved</p>
+    <div class="social-links">
+      <a href="#"><i class="fab fa-twitter"></i></a>
+      <a href="#"><i class="fab fa-github"></i></a>
+      <a href="#"><i class="fab fa-linkedin"></i></a>
+    </div>
   </footer>
 
   <!-- SCRIPT -->
-  <script src="Script.js"></script>
+  <script>
+    // DOM Elements
+    const darkToggle = document.getElementById('darkToggle');
+    const backToTop = document.getElementById('backToTop');
+    const scrollElements = document.querySelectorAll('.scroll-fade');
+    const hamburger = document.getElementById('hamburger');
+    const mobileNav = document.getElementById('mobileNav');
+    
+    // Check for saved theme preference or respect OS preference
+    if (localStorage.getItem('theme') === 'dark' || 
+        (window.matchMedia('(prefers-color-scheme: dark)').matches && !localStorage.getItem('theme'))) {
+      document.documentElement.setAttribute('data-theme', 'dark');
+      darkToggle.textContent = '☀️ Light Mode';
+    } else {
+      document.documentElement.setAttribute('data-theme', 'light');
+      darkToggle.textContent = '🌙 Dark Mode';
+    }
+    
+    // Toggle Dark/Light Mode
+    darkToggle.addEventListener('click', () => {
+      const currentTheme = document.documentElement.getAttribute('data-theme');
+      const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+      
+      document.documentElement.setAttribute('data-theme', newTheme);
+      localStorage.setItem('theme', newTheme);
+      
+      darkToggle.textContent = newTheme === 'dark' ? '☀️ Light Mode' : '🌙 Dark Mode';
+    });
+    
+    // Back to Top Button
+    window.addEventListener('scroll', () => {
+      if (window.pageYOffset > 300) {
+        backToTop.classList.add('visible');
+      } else {
+        backToTop.classList.remove('visible');
+      }
+    });
+    
+    backToTop.addEventListener('click', () => {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    });
+    
+    // Hamburger Menu Toggle
+    hamburger.addEventListener('click', () => {
+      hamburger.classList.toggle('active');
+      mobileNav.classList.toggle('active');
+      
+      // Animate hamburger to X
+      const spans = hamburger.querySelectorAll('span');
+      if (hamburger.classList.contains('active')) {
+        spans[0].style.transform = 'rotate(45deg)';
+        spans[1].style.opacity = '0';
+        spans[2].style.transform = 'rotate(-45deg)';
+      } else {
+        spans[0].style.transform = 'rotate(0)';
+        spans[1].style.opacity = '1';
+        spans[2].style.transform = 'rotate(0)';
+      }
+    });
+    
+    // Close mobile menu when clicking on a link
+    const mobileLinks = mobileNav.querySelectorAll('a');
+    mobileLinks.forEach(link => {
+      link.addEventListener('click', () => {
+        mobileNav.classList.remove('active');
+        hamburger.classList.remove('active');
+        
+        // Reset hamburger animation
+        const spans = hamburger.querySelectorAll('span');
+        spans[0].style.transform = 'rotate(0)';
+        spans[1].style.opacity = '1';
+        spans[2].style.transform = 'rotate(0)';
+      });
+    });
+    
+    // Scroll Animations
+    const elementInView = (el, scrollOffset = 0) => {
+      const elementTop = el.getBoundingClientRect().top;
+      return (
+        elementTop <= 
+        ((window.innerHeight || document.documentElement.clientHeight) * (scrollOffset / 100))
+      );
+    };
+    
+    const displayScrollElement = (element) => {
+      element.classList.add('visible');
+    };
+    
+    const hideScrollElement = (element) => {
+      element.classList.remove('visible');
+    };
+    
+    const handleScrollAnimation = () => {
+      scrollElements.forEach((el) => {
+        if (elementInView(el, 85)) {
+          displayScrollElement(el);
+        } else {
+          hideScrollElement(el);
+        }
+      });
+    };
+    
+    window.addEventListener('scroll', () => {
+      handleScrollAnimation();
+    });
+    
+    // Initialize scroll animations on page load
+    document.addEventListener('DOMContentLoaded', () => {
+      handleScrollAnimation();
+    });
+  </script>
 </body>
 </html>
