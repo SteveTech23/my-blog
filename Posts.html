@@ -4,50 +4,534 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Blog Posts - Steven's Blog</title>
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    /* CSS Variables for Theming */
+    :root {
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
+      --secondary: #7e22ce;
+      --accent: #f97316;
+      --text: #1f2937;
+      --text-light: #6b7280;
+      --bg: #ffffff;
+      --bg-secondary: #f8fafc;
+      --card-bg: #ffffff;
+      --shadow: rgba(0, 0, 0, 0.1);
+      --shadow-hover: rgba(0, 0, 0, 0.15);
+      --transition: all 0.3s ease;
+      --radius: 12px;
+      --max-width: 1000px;
+    }
+
+    /* Dark Theme Variables */
+    [data-theme="dark"] {
+      --primary: #3b82f6;
+      --primary-dark: #2563eb;
+      --secondary: #a855f7;
+      --accent: #fb923c;
+      --text: #f3f4f6;
+      --text-light: #d1d5db;
+      --bg: #111827;
+      --bg-secondary: #1f2937;
+      --card-bg: #1a2434;
+      --shadow: rgba(0, 0, 0, 0.25);
+      --shadow-hover: rgba(0, 0, 0, 0.35);
+    }
+
+    /* Base Styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      line-height: 1.6;
+      color: var(--text);
+      background-color: var(--bg);
+      transition: var(--transition);
+      padding: 2rem 1rem;
+    }
+
+    /* Typography */
+    h1, h2, h3, h4, h5, h6 {
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: 1rem;
+      color: var(--text);
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    h2 {
+      font-size: 2rem;
+      margin-bottom: 1.5rem;
+      color: var(--primary);
+    }
+
+    h3 {
+      font-size: 1.5rem;
+      margin-bottom: 1.2rem;
+      color: var(--primary);
+    }
+
+    p {
+      margin-bottom: 1rem;
+    }
+
+    a {
+      color: var(--primary);
+      text-decoration: none;
+      transition: var(--transition);
+    }
+
+    a:hover {
+      color: var(--primary-dark);
+    }
+
+    /* Layout */
+    .container {
+      max-width: var(--max-width);
+      margin: 0 auto;
+    }
+
+    main {
+      padding: 2rem 0;
+    }
+
+    section {
+      margin-bottom: 3rem;
+    }
+
+    /* Intro Section */
+    .intro {
+      text-align: center;
+      padding: 3rem 2rem;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+      color: white;
+      border-radius: var(--radius);
+      margin-bottom: 3rem;
+    }
+
+    .intro h2 {
+      color: white;
+      font-size: 2.5rem;
+    }
+
+    .intro p {
+      font-size: 1.2rem;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* Post Previews */
+    .post-preview {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      padding: 2rem;
+      box-shadow: 0 4px 6px var(--shadow);
+      transition: var(--transition);
+      margin-bottom: 2rem;
+      border-left: 4px solid var(--accent);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .post-preview::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.3s ease;
+    }
+
+    .post-preview:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px var(--shadow-hover);
+    }
+
+    .post-preview:hover::before {
+      transform: scaleX(1);
+    }
+
+    .post-preview h3 {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .post-preview p:last-of-type {
+      margin-bottom: 1.5rem;
+    }
+
+    .post-meta {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1rem;
+      color: var(--text-light);
+      font-size: 0.9rem;
+    }
+
+    .post-date {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .read-more {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 600;
+      padding: 0.5rem 1rem;
+      background: var(--primary);
+      color: white;
+      border-radius: 50px;
+      transition: var(--transition);
+    }
+
+    .read-more:hover {
+      background: var(--primary-dark);
+      gap: 0.7rem;
+    }
+
+    /* CV Section */
+    .cv-section {
+      text-align: center;
+      padding: 2rem;
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      box-shadow: 0 4px 6px var(--shadow);
+    }
+
+    .cv-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1.5rem;
+      background: var(--accent);
+      color: white;
+      border-radius: 50px;
+      font-weight: 600;
+      transition: var(--transition);
+      margin-top: 1rem;
+    }
+
+    .cv-btn:hover {
+      background: #ea580c;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(249, 115, 22, 0.3);
+    }
+
+    /* Buttons */
+    .toggle-btn, .top-btn {
+      position: fixed;
+      padding: 0.75rem 1.5rem;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      font-weight: 600;
+      box-shadow: 0 4px 6px var(--shadow);
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      z-index: 999;
+    }
+
+    .toggle-btn:hover, .top-btn:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px var(--shadow-hover);
+    }
+
+    .toggle-btn {
+      bottom: 2rem;
+      right: 2rem;
+    }
+
+    .top-btn {
+      bottom: 2rem;
+      left: 2rem;
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    .top-btn.visible {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 2rem;
+      margin-top: 4rem;
+      color: var(--text-light);
+      background: var(--bg-secondary);
+      border-radius: var(--radius);
+    }
+
+    .social-links {
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      margin-top: 1rem;
+    }
+
+    .social-links a {
+      color: var(--text-light);
+      font-size: 1.5rem;
+      transition: var(--transition);
+    }
+
+    .social-links a:hover {
+      color: var(--primary);
+    }
+
+    /* Animations */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .scroll-fade {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .scroll-fade.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Category Tags */
+    .category-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      padding: 0.3rem 0.8rem;
+      background: var(--bg-secondary);
+      border-radius: 50px;
+      font-size: 0.8rem;
+      color: var(--text-light);
+      margin-right: 0.5rem;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 2rem;
+      }
+      
+      h2 {
+        font-size: 1.75rem;
+      }
+      
+      h3 {
+        font-size: 1.3rem;
+      }
+      
+      .intro {
+        padding: 2rem 1rem;
+      }
+      
+      .intro h2 {
+        font-size: 2rem;
+      }
+      
+      .toggle-btn, .top-btn {
+        padding: 0.6rem 1.2rem;
+        font-size: 0.9rem;
+      }
+      
+      .post-meta {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+      }
+    }
+  </style>
 </head>
 <body>
+  <div class="container">
+    <!-- PAGE HEADING -->
+    <header>
+      <h1>Blog Posts</h1>
+    </header>
 
-  <main>
-    <section class="intro scroll-fade">
-      <h2>📝 My Blog Posts</h2>
-      <p>Explore my thoughts, tips, and experiences in IT, web development, and personal growth.</p>
-    </section>
+    <!-- MAIN CONTENT -->
+    <main>
+      <section class="intro scroll-fade">
+        <h2>📝 My Blog Posts</h2>
+        <p>Explore my thoughts, tips, and experiences in IT, web development, and personal growth.</p>
+      </section>
 
-    <section class="post-preview scroll-fade">
-      <h3>Getting Started in IT Support</h3>
-      <p><strong>Date:</strong> July 25, 2025</p>
-      <p>I shared my journey into IT support, including helpful tools and tips for beginners.</p>
-      <a href="post1.html">Read More →</a>
-    </section>
+      <section class="post-preview scroll-fade">
+        <h3><i class="fas fa-headset"></i> Getting Started in IT Support</h3>
+        <div class="post-meta">
+          <span class="post-date"><i class="far fa-calendar"></i> July 25, 2025</span>
+          <span class="category-tag"><i class="fas fa-tag"></i> IT Support</span>
+          <span class="category-tag"><i class="fas fa-tag"></i> Career</span>
+        </div>
+        <p>I shared my journey into IT support, including helpful tools and tips for beginners. Learn about the essential skills and mindset needed to succeed in this field.</p>
+        <a href="post1.html" class="read-more">Read More <i class="fas fa-arrow-right"></i></a>
+      </section>
 
-    <section class="post-preview scroll-fade">
-      <h3>Building My First Website</h3>
-      <p><strong>Date:</strong> August 1, 2025</p>
-      <p>This post covers how I built this blog using HTML, CSS, JavaScript — with dark mode and scroll effects!</p>
-      <a href="post2.html">Read More →</a>
-    </section>
+      <section class="post-preview scroll-fade">
+        <h3><i class="fas fa-laptop-code"></i> Building My First Website</h3>
+        <div class="post-meta">
+          <span class="post-date"><i class="far fa-calendar"></i> August 1, 2025</span>
+          <span class="category-tag"><i class="fas fa-tag"></i> Web Development</span>
+          <span class="category-tag"><i class="fas fa-tag"></i> Projects</span>
+        </div>
+        <p>This post covers how I built this blog using HTML, CSS, JavaScript — with dark mode and scroll effects! Discover the techniques I used to create a responsive, modern blog.</p>
+        <a href="post2.html" class="read-more">Read More <i class="fas fa-arrow-right"></i></a>
+      </section>
 
-    <section class="post-preview scroll-fade">
-      <h3>Learning Networking Basics</h3>
-      <p><strong>Date:</strong> Coming Soon</p>
-      <p>I'll explain the basics of networks, routers, IPs, and some CCNA knowledge I've started learning.</p>
-      <a href="post3.html">Read More →</a>
-    </section>
+      <section class="post-preview scroll-fade">
+        <h3><i class="fas fa-network-wired"></i> Learning Networking Basics</h3>
+        <div class="post-meta">
+          <span class="post-date"><i class="far fa-calendar"></i> Coming Soon</span>
+          <span class="category-tag"><i class="fas fa-tag"></i> Networking</span>
+          <span class="category-tag"><i class="fas fa-tag"></i> Education</span>
+        </div>
+        <p>I'll explain the basics of networks, routers, IPs, and some CCNA knowledge I've started learning. Perfect for beginners looking to understand networking fundamentals.</p>
+        <a href="post3.html" class="read-more">Read More <i class="fas fa-arrow-right"></i></a>
+      </section>
 
-    <!-- CV DOWNLOAD BUTTON -->
-    <section class="scroll-fade">
-      <h3>📄 Want to see my CV?</h3>
-      <a href="CV/steven Msowoya resume 5.pdf" download class="cv-btn">Download My CV</a>
-    </section>
-  </main>
+      <section class="post-preview scroll-fade">
+        <h3><i class="fas fa-mobile-alt"></i> Mobile App Development with React Native</h3>
+        <div class="post-meta">
+          <span class="post-date"><i class="far fa-calendar"></i> Coming Soon</span>
+          <span class="category-tag"><i class="fas fa-tag"></i> Mobile Development</span>
+          <span class="category-tag"><i class="fas fa-tag"></i> React Native</span>
+        </div>
+        <p>Follow my journey learning React Native and building cross-platform mobile applications. I'll share tips, challenges, and resources for getting started with mobile development.</p>
+        <a href="post4.html" class="read-more">Read More <i class="fas fa-arrow-right"></i></a>
+      </section>
 
-  <!-- DARK MODE TOGGLE -->
-  <button id="darkToggle" class="toggle-btn">🌙 Dark Mode</button>
+      <!-- CV DOWNLOAD SECTION -->
+      <section class="cv-section scroll-fade">
+        <h3><i class="fas fa-file-alt"></i> Want to see my CV?</h3>
+        <p>Download my resume to learn more about my skills, experience, and education.</p>
+        <a href="CV/steven Msowoya resume 5.pdf" download class="cv-btn">
+          <i class="fas fa-download"></i> Download My CV
+        </a>
+      </section>
+    </main>
 
-  <!-- BACK TO TOP BUTTON -->
-  <button id="backToTop" class="top-btn">⬆ Back to Top</button>
+    <!-- DARK MODE TOGGLE -->
+    <button id="darkToggle" class="toggle-btn">🌙 Dark Mode</button>
 
-  <script src="script.js"></script>
+    <!-- BACK TO TOP BUTTON -->
+    <button id="backToTop" class="top-btn">⬆ Back to Top</button>
+
+    <!-- FOOTER -->
+    <footer>
+      <p>© 2025 Steven Msowoya | All Rights Reserved</p>
+      <div class="social-links">
+        <a href="#"><i class="fab fa-twitter"></i></a>
+        <a href="#"><i class="fab fa-github"></i></a>
+        <a href="#"><i class="fab fa-linkedin"></i></a>
+      </div>
+    </footer>
+  </div>
+
+  <!-- SCRIPT -->
+  <script>
+    // DOM Elements
+    const darkToggle = document.getElementById('darkToggle');
+    const backToTop = document.getElementById('backToTop');
+    const scrollElements = document.querySelectorAll('.scroll-fade');
+    
+    // Check for saved theme preference or respect OS preference
+    if (localStorage.getItem('theme') === 'dark' || 
+        (window.matchMedia('(prefers-color-scheme: dark)').matches && !localStorage.getItem('theme'))) {
+      document.documentElement.setAttribute('data-theme', 'dark');
+      darkToggle.textContent = '☀️ Light Mode';
+    } else {
+      document.documentElement.setAttribute('data-theme', 'light');
+      darkToggle.textContent = '🌙 Dark Mode';
+    }
+    
+    // Toggle Dark/Light Mode
+    darkToggle.addEventListener('click', () => {
+      const currentTheme = document.documentElement.getAttribute('data-theme');
+      const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+      
+      document.documentElement.setAttribute('data-theme', newTheme);
+      localStorage.setItem('theme', newTheme);
+      
+      darkToggle.textContent = newTheme === 'dark' ? '☀️ Light Mode' : '🌙 Dark Mode';
+    });
+    
+    // Back to Top Button
+    window.addEventListener('scroll', () => {
+      if (window.pageYOffset > 300) {
+        backToTop.classList.add('visible');
+      } else {
+        backToTop.classList.remove('visible');
+      }
+    });
+    
+    backToTop.addEventListener('click', () => {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    });
+    
+    // Scroll Animations
+    const elementInView = (el, scrollOffset = 0) => {
+      const elementTop = el.getBoundingClientRect().top;
+      return (
+        elementTop <= 
+        ((window.innerHeight || document.documentElement.clientHeight) * (scrollOffset / 100))
+      );
+    };
+    
+    const displayScrollElement = (element) => {
+      element.classList.add('visible');
+    };
+    
+    const hideScrollElement = (element) => {
+      element.classList.remove('visible');
+    };
+    
+    const handleScrollAnimation = () => {
+      scrollElements.forEach((el) => {
+        if (elementInView(el, 85)) {
+          displayScrollElement(el);
+        } else {
+          hideScrollElement(el);
+        }
+      });
+    };
+    
+    window.addEventListener('scroll', () => {
+      handleScrollAnimation();
+    });
+    
+    // Initialize scroll animations on page load
+    document.addEventListener('DOMContentLoaded', () => {
+      handleScrollAnimation();
+    });
+  </script>
 </body>
 </html>
