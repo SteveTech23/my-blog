@@ -1158,92 +1158,115 @@
       });
     }
     
-    // Create radar chart
+    // Create radar chart - FIXED VERSION
     function createRadarChart() {
+      // Clear existing chart
+      radarChart.innerHTML = '';
+      
       const skills = [
-        { name: 'Frontend', level: 85, color: 'var(--primary)' },
-        { name: 'Backend', level: 75, color: 'var(--secondary)' },
-        { name: 'Mobile', level: 70, color: 'var(--accent)' },
-        { name: 'Databases', level: 80, color: 'var(--success)' },
-        { name: 'DevOps', level: 60, color: 'var(--warning)' },
-        { name: 'UI/UX', level: 75, color: 'var(--danger)' }
+        { name: 'Frontend', level: 85 },
+        { name: 'Backend', level: 75 },
+        { name: 'Mobile', level: 70 },
+        { name: 'Databases', level: 80 },
+        { name: 'DevOps', level: 60 },
+        { name: 'UI/UX', level: 75 }
       ];
       
-      // Create radar grid
-      for (let i = 0; i < 4; i++) {
+      const numSkills = skills.length;
+      const centerX = 50; // percentage
+      const centerY = 50; // percentage
+      const maxRadius = 40; // percentage
+      
+      // Create concentric circles (grid)
+      for (let i = 1; i <= 4; i++) {
+        const radius = (maxRadius / 4) * i;
         const grid = document.createElement('div');
         grid.classList.add('radar-grid');
+        grid.style.width = `${radius * 2}%`;
+        grid.style.height = `${radius * 2}%`;
+        grid.style.borderColor = 'var(--bg-secondary)';
         radarChart.appendChild(grid);
       }
       
-      // Create axes
-      const angleStep = (2 * Math.PI) / skills.length;
-      for (let i = 0; i < skills.length; i++) {
+      // Create axes and labels
+      const angleStep = (2 * Math.PI) / numSkills;
+      
+      for (let i = 0; i < numSkills; i++) {
+        const angle = i * angleStep;
+        
+        // Create axis line
         const axis = document.createElement('div');
         axis.classList.add('radar-axis');
-        const angle = i * angleStep;
-        axis.style.transform = `rotate(${angle}rad)`;
+        axis.style.transform = `rotate(${angle}rad) translateY(-${maxRadius}%)`;
+        axis.style.height = `${maxRadius}%`;
         radarChart.appendChild(axis);
         
-        // Add labels
+        // Create label
         const label = document.createElement('div');
         label.classList.add('radar-label');
         label.textContent = skills[i].name;
-        const labelRadius = 52; // percentage from center
-        const x = 50 + labelRadius * Math.sin(angle);
-        const y = 50 - labelRadius * Math.cos(angle);
+        
+        // Position label at the end of the axis
+        const labelDistance = maxRadius + 10; // 10% beyond the circle
+        const x = centerX + labelDistance * Math.sin(angle);
+        const y = centerY - labelDistance * Math.cos(angle);
+        
         label.style.left = `${x}%`;
         label.style.top = `${y}%`;
         radarChart.appendChild(label);
       }
       
-      // Create data points polygon
+      // Create data polygon
       const dataPoints = document.createElement('div');
       dataPoints.classList.add('radar-data');
-      dataPoints.id = 'radarData';
+      
+      // Calculate polygon points
+      let polygonPoints = '';
+      for (let i = 0; i < numSkills; i++) {
+        const angle = i * angleStep;
+        const radius = (skills[i].level / 100) * maxRadius;
+        const x = centerX + radius * Math.sin(angle);
+        const y = centerY - radius * Math.cos(angle);
+        polygonPoints += `${x}% ${y}%`;
+        if (i < numSkills - 1) polygonPoints += ', ';
+      }
+      
+      // Apply polygon shape
+      dataPoints.style.clipPath = `polygon(${polygonPoints})`;
+      dataPoints.style.background = `linear-gradient(135deg, var(--primary), var(--secondary))`;
+      dataPoints.style.opacity = '0.7';
+      dataPoints.style.width = '100%';
+      dataPoints.style.height = '100%';
+      
+      // Animate the chart
+      dataPoints.style.transform = 'translate(-50%, -50%) scale(0)';
       radarChart.appendChild(dataPoints);
       
-      // Animate the radar chart
+      // Trigger animation
       setTimeout(() => {
-        let points = '';
-        for (let i = 0; i < skills.length; i++) {
-          const angle = i * angleStep;
-          const radius = (skills[i].level / 100) * 40; // 40% max radius
-          const x = 50 + radius * Math.sin(angle);
-          const y = 50 - radius * Math.cos(angle);
-          points += `${x}% ${y}%${i === skills.length - 1 ? '' : ', '}`;
-        }
-        
-        dataPoints.style.clipPath = `polygon(${points})`;
-        dataPoints.style.background = `linear-gradient(135deg, var(--primary), var(--secondary))`;
-        dataPoints.style.opacity = '0.7';
-        dataPoints.style.width = '100%';
-        dataPoints.style.height = '100%';
-      }, 500);
+        dataPoints.style.transition = 'transform 1s cubic-bezier(0.34, 1.56, 0.64, 1)';
+        dataPoints.style.transform = 'translate(-50%, -50%) scale(1)';
+      }, 100);
     }
     
     // Counter animations for stats
     function animateStats() {
       const counters = [
-        { element: document.getElementById('languagesCount'), target: 12, duration: 2000 },
-        { element: document.getElementById('projectsCount'), target: 24, duration: 2500 },
-        { element: document.getElementById('experienceYears'), target: 3, duration: 1500 }
+        { element: document.getElementById('languagesCount'), target: 12, duration: 2000, suffix: '' },
+        { element: document.getElementById('projectsCount'), target: 28, duration: 2500, suffix: '' },
+        { element: document.getElementById('experienceYears'), target: 3, duration: 1500, suffix: '+' }
       ];
       
       counters.forEach(counter => {
         let current = 0;
-        const increment = counter.target / (counter.duration / 16); // 60fps
+        const increment = counter.target / (counter.duration / 16);
         const timer = setInterval(() => {
           current += increment;
           if (current >= counter.target) {
             current = counter.target;
             clearInterval(timer);
           }
-          if (counter.element.id === 'projectsCount') {
-            counter.element.textContent = Math.floor(current) + '+';
-          } else {
-            counter.element.textContent = Math.floor(current);
-          }
+          counter.element.textContent = Math.floor(current) + counter.suffix;
         }, 16);
       });
     }
@@ -1262,15 +1285,15 @@
           
           // Trigger specific animations based on element
           if (entry.target.classList.contains('skills-graph-container')) {
-            animateSkillBars();
+            setTimeout(animateSkillBars, 300);
           }
           
-          if (entry.target.id === 'radarChart' || entry.target.parentElement.id === 'radarChart') {
-            createRadarChart();
+          if (entry.target.querySelector('#radarChart')) {
+            setTimeout(createRadarChart, 500);
           }
           
           if (entry.target.classList.contains('stats-grid')) {
-            animateStats();
+            setTimeout(animateStats, 200);
           }
         }
       });
@@ -1278,6 +1301,33 @@
     
     // Observe all scroll-fade elements
     scrollElements.forEach(el => observer.observe(el));
+    
+    // Initialize animations on page load for elements already in view
+    document.addEventListener('DOMContentLoaded', () => {
+      // Check which elements are already in view
+      scrollElements.forEach(el => {
+        const rect = el.getBoundingClientRect();
+        const isVisible = rect.top < window.innerHeight && rect.bottom > 0;
+        if (isVisible) {
+          el.classList.add('visible');
+          
+          // If skills graph is in view, animate it
+          if (el.classList.contains('skills-graph-container')) {
+            setTimeout(animateSkillBars, 300);
+          }
+          
+          // If radar chart is in view, create it
+          if (el.querySelector('#radarChart') || el.id === 'radarChart') {
+            setTimeout(createRadarChart, 500);
+          }
+          
+          // If stats grid is in view, animate it
+          if (el.classList.contains('stats-grid')) {
+            setTimeout(animateStats, 200);
+          }
+        }
+      });
+    });
     
     // Add hover effect to skill categories
     const skillCategories = document.querySelectorAll('.skill-category');
@@ -1347,4 +1397,3 @@
   </script>
 </body>
 </html>
-
