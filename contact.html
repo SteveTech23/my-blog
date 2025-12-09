@@ -3,39 +3,569 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Contact Me</title>
-  <link rel="stylesheet" href="Style.css" />
+  <title>Contact Me | Animated</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    :root {
+      --primary: #6c63ff;
+      --secondary: #ff6584;
+      --accent: #36d1dc;
+      --light: #f8f9fa;
+      --dark: #121212;
+      --gray: #2d2d2d;
+      --text-light: #333;
+      --text-dark: #f0f0f0;
+      --card-bg-light: rgba(255, 255, 255, 0.9);
+      --card-bg-dark: rgba(30, 30, 30, 0.9);
+      --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      --transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    body {
+      background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+      color: var(--text-light);
+      min-height: 100vh;
+      overflow-x: hidden;
+      transition: var(--transition);
+    }
+
+    body.dark-mode {
+      background: linear-gradient(135deg, #000428, #004e92);
+      color: var(--text-dark);
+    }
+
+    /* Floating background elements */
+    .floating-elements {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      overflow: hidden;
+    }
+
+    .floating-element {
+      position: absolute;
+      border-radius: 50%;
+      background: radial-gradient(circle, var(--primary), transparent);
+      opacity: 0.2;
+      animation: float 20s infinite linear;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0) translateX(0); }
+      25% { transform: translateY(-50px) translateX(50px); }
+      50% { transform: translateY(50px) translateX(-50px); }
+      75% { transform: translateY(-30px) translateX(-30px); }
+    }
+
+    main {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 20px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Intro Section */
+    .intro {
+      text-align: center;
+      margin-bottom: 80px;
+      padding: 40px 20px;
+      position: relative;
+      opacity: 0;
+      transform: translateY(50px);
+      transition: opacity 1s ease, transform 1s ease;
+    }
+
+    .intro.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .intro h2 {
+      font-size: 3.5rem;
+      margin-bottom: 20px;
+      background: linear-gradient(to right, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      display: inline-block;
+      position: relative;
+    }
+
+    .intro h2::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100px;
+      height: 4px;
+      background: linear-gradient(to right, var(--primary), var(--secondary));
+      border-radius: 2px;
+    }
+
+    .intro p {
+      font-size: 1.3rem;
+      max-width: 700px;
+      margin: 30px auto;
+      line-height: 1.6;
+      color: inherit;
+    }
+
+    /* Contact Form */
+    .contact-form {
+      background: var(--card-bg-light);
+      padding: 50px;
+      border-radius: 20px;
+      box-shadow: var(--shadow);
+      max-width: 800px;
+      margin: 0 auto 100px;
+      backdrop-filter: blur(10px);
+      opacity: 0;
+      transform: translateY(50px) rotateX(-10deg);
+      transition: opacity 1s ease 0.3s, transform 1s ease 0.3s;
+    }
+
+    body.dark-mode .contact-form {
+      background: var(--card-bg-dark);
+    }
+
+    .contact-form.visible {
+      opacity: 1;
+      transform: translateY(0) rotateX(0);
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 25px;
+    }
+
+    label {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: inherit;
+      display: block;
+    }
+
+    input, textarea {
+      padding: 18px 20px;
+      border: 2px solid #ddd;
+      border-radius: 12px;
+      font-size: 1rem;
+      transition: var(--transition);
+      width: 100%;
+      background: rgba(255, 255, 255, 0.8);
+      color: var(--text-light);
+    }
+
+    body.dark-mode input,
+    body.dark-mode textarea {
+      background: rgba(50, 50, 50, 0.8);
+      border-color: #444;
+      color: var(--text-dark);
+    }
+
+    input:focus, textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.2);
+      transform: translateY(-3px);
+    }
+
+    textarea {
+      min-height: 180px;
+      resize: vertical;
+    }
+
+    button[type="submit"] {
+      background: linear-gradient(to right, var(--primary), var(--secondary));
+      color: white;
+      border: none;
+      padding: 20px;
+      border-radius: 12px;
+      font-size: 1.2rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+      margin-top: 10px;
+    }
+
+    button[type="submit"]:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px rgba(108, 99, 255, 0.4);
+    }
+
+    button[type="submit"]:active {
+      transform: translateY(-2px);
+    }
+
+    button[type="submit"]::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 5px;
+      height: 5px;
+      background: rgba(255, 255, 255, 0.5);
+      opacity: 0;
+      border-radius: 100%;
+      transform: scale(1, 1) translate(-50%);
+      transform-origin: 50% 50%;
+    }
+
+    button[type="submit"]:focus:not(:active)::after {
+      animation: ripple 1s ease-out;
+    }
+
+    @keyframes ripple {
+      0% {
+        transform: scale(0, 0);
+        opacity: 0.5;
+      }
+      100% {
+        transform: scale(40, 40);
+        opacity: 0;
+      }
+    }
+
+    /* Toggle buttons */
+    .toggle-btn, .top-btn {
+      position: fixed;
+      z-index: 100;
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(10px);
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      color: white;
+      padding: 15px 25px;
+      border-radius: 50px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .toggle-btn {
+      bottom: 30px;
+      right: 30px;
+    }
+
+    .top-btn {
+      bottom: 30px;
+      left: 30px;
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    .top-btn.visible {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .toggle-btn:hover, .top-btn:hover {
+      background: rgba(255, 255, 255, 0.25);
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Success message */
+    .success-message {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0);
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      color: white;
+      padding: 40px;
+      border-radius: 20px;
+      text-align: center;
+      z-index: 1000;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      opacity: 0;
+      transition: var(--transition);
+      max-width: 500px;
+      width: 90%;
+    }
+
+    .success-message.show {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1);
+    }
+
+    .success-message i {
+      font-size: 4rem;
+      margin-bottom: 20px;
+      display: block;
+    }
+
+    /* Particle animation for form */
+    .form-particles {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: -1;
+      overflow: hidden;
+      border-radius: 20px;
+    }
+
+    .particle {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      background: var(--primary);
+      border-radius: 50%;
+      opacity: 0;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .intro h2 {
+        font-size: 2.5rem;
+      }
+      
+      .intro p {
+        font-size: 1.1rem;
+      }
+      
+      .contact-form {
+        padding: 30px 20px;
+      }
+      
+      .toggle-btn, .top-btn {
+        padding: 12px 20px;
+        font-size: 0.9rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .intro h2 {
+        font-size: 2rem;
+      }
+      
+      .toggle-btn, .top-btn {
+        padding: 10px 15px;
+        font-size: 0.8rem;
+      }
+      
+      .toggle-btn {
+        right: 20px;
+        bottom: 20px;
+      }
+      
+      .top-btn {
+        left: 20px;
+        bottom: 20px;
+      }
+    }
+  </style>
 </head>
 <body>
+  <!-- Floating background elements -->
+  <div class="floating-elements" id="floatingElements"></div>
 
   <main>
-    <section class="intro scroll-fade">
-      <h2>📬 Contact Me</h2>
-      <p>Have a question, idea, or want to collaborate? Drop me a message!</p>
+    <section class="intro">
+      <h2><i class="fas fa-paper-plane"></i> Contact Me</h2>
+      <p>Have a question, idea, or want to collaborate? Drop me a message! I'm excited to connect with you and explore new possibilities together. Whether it's a project, feedback, or just a friendly hello, I'd love to hear from you.</p>
+      <div class="contact-info">
+        <p><i class="fas fa-envelope"></i> hello@example.com | <i class="fas fa-phone"></i> +1 (123) 456-7890</p>
+      </div>
     </section>
 
-    <section class="contact-form scroll-fade">
-      <form action="#" method="POST">
-        <label for="name">Name:</label>
-        <input type="text" id="name" name="name" required />
-
-        <label for="email">Email:</label>
-        <input type="email" id="email" name="email" required />
-
-        <label for="message">Message:</label>
-        <textarea id="message" name="message" rows="5" required></textarea>
-
-        <button type="submit">Send Message</button>
+    <section class="contact-form">
+      <div class="form-particles" id="formParticles"></div>
+      <form id="contactForm">
+        <div class="form-group">
+          <label for="name"><i class="fas fa-user"></i> Your Name</label>
+          <input type="text" id="name" name="name" required placeholder="Enter your name" />
+        </div>
+        
+        <div class="form-group">
+          <label for="email"><i class="fas fa-envelope"></i> Email Address</label>
+          <input type="email" id="email" name="email" required placeholder="Enter your email" />
+        </div>
+        
+        <div class="form-group">
+          <label for="message"><i class="fas fa-comment-dots"></i> Your Message</label>
+          <textarea id="message" name="message" rows="5" required placeholder="What would you like to say?"></textarea>
+        </div>
+        
+        <button type="submit">
+          <i class="fas fa-paper-plane"></i> Send Message
+        </button>
       </form>
     </section>
   </main>
 
-  <!-- Dark Mode + Back to Top -->
-  <button id="darkToggle" class="toggle-btn">🌙 Dark Mode</button>
-  <button id="backToTop" class="top-btn">⬆ Back to Top</button>
+  <!-- Success Message -->
+  <div class="success-message" id="successMessage">
+    <i class="fas fa-check-circle"></i>
+    <h3>Message Sent Successfully!</h3>
+    <p>Thank you for reaching out. I'll get back to you soon.</p>
+    <button id="closeSuccess" style="margin-top:20px; padding:10px 20px; background:white; color:#6c63ff; border:none; border-radius:10px; font-weight:bold; cursor:pointer;">Close</button>
+  </div>
 
-  <script src="Script.js"></script>
+  <!-- Dark Mode + Back to Top -->
+  <button id="darkToggle" class="toggle-btn"><i class="fas fa-moon"></i> Dark Mode</button>
+  <button id="backToTop" class="top-btn"><i class="fas fa-arrow-up"></i> Back to Top</button>
+
+  <script>
+    // Create floating background elements
+    const floatingElements = document.getElementById('floatingElements');
+    for (let i = 0; i < 15; i++) {
+      const element = document.createElement('div');
+      element.classList.add('floating-element');
+      const size = Math.random() * 100 + 50;
+      element.style.width = `${size}px`;
+      element.style.height = `${size}px`;
+      element.style.left = `${Math.random() * 100}%`;
+      element.style.top = `${Math.random() * 100}%`;
+      element.style.animationDelay = `${Math.random() * 20}s`;
+      element.style.background = `radial-gradient(circle, ${i % 3 === 0 ? 'var(--primary)' : i % 3 === 1 ? 'var(--secondary)' : 'var(--accent)'}, transparent)`;
+      floatingElements.appendChild(element);
+    }
+
+    // Scroll animation triggers
+    function checkVisibility() {
+      const elements = document.querySelectorAll('.intro, .contact-form');
+      elements.forEach(element => {
+        const rect = element.getBoundingClientRect();
+        const isVisible = rect.top <= window.innerHeight * 0.85;
+        
+        if (isVisible) {
+          element.classList.add('visible');
+        }
+      });
+      
+      // Back to top button visibility
+      const backToTop = document.getElementById('backToTop');
+      if (window.scrollY > 300) {
+        backToTop.classList.add('visible');
+      } else {
+        backToTop.classList.remove('visible');
+      }
+    }
+
+    // Dark mode toggle
+    const darkToggle = document.getElementById('darkToggle');
+    const darkIcon = darkToggle.querySelector('i');
+    
+    darkToggle.addEventListener('click', () => {
+      document.body.classList.toggle('dark-mode');
+      
+      if (document.body.classList.contains('dark-mode')) {
+        darkIcon.className = 'fas fa-sun';
+        darkToggle.innerHTML = '<i class="fas fa-sun"></i> Light Mode';
+      } else {
+        darkIcon.className = 'fas fa-moon';
+        darkToggle.innerHTML = '<i class="fas fa-moon"></i> Dark Mode';
+      }
+    });
+
+    // Back to top functionality
+    const backToTop = document.getElementById('backToTop');
+    backToTop.addEventListener('click', () => {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    });
+
+    // Form submission with animation
+    const contactForm = document.getElementById('contactForm');
+    const successMessage = document.getElementById('successMessage');
+    const closeSuccess = document.getElementById('closeSuccess');
+    
+    contactForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      
+      // Create particle effect on form submission
+      createFormParticles();
+      
+      // Show success message after delay
+      setTimeout(() => {
+        successMessage.classList.add('show');
+      }, 800);
+      
+      // Reset form
+      setTimeout(() => {
+        contactForm.reset();
+      }, 500);
+    });
+    
+    closeSuccess.addEventListener('click', () => {
+      successMessage.classList.remove('show');
+    });
+
+    // Create particles around form
+    function createFormParticles() {
+      const formParticles = document.getElementById('formParticles');
+      formParticles.innerHTML = '';
+      
+      for (let i = 0; i < 30; i++) {
+        const particle = document.createElement('div');
+        particle.classList.add('particle');
+        
+        const startX = Math.random() * 100;
+        const startY = Math.random() * 100;
+        const endX = startX + (Math.random() * 40 - 20);
+        const endY = startY + (Math.random() * 40 - 20);
+        
+        particle.style.left = `${startX}%`;
+        particle.style.top = `${startY}%`;
+        particle.style.backgroundColor = i % 3 === 0 ? 'var(--primary)' : i % 3 === 1 ? 'var(--secondary)' : 'var(--accent)';
+        
+        formParticles.appendChild(particle);
+        
+        // Animate particle
+        const animation = particle.animate([
+          { opacity: 0, transform: 'scale(0)' },
+          { opacity: 1, transform: 'scale(1)' },
+          { opacity: 0, transform: `translate(${endX - startX}%, ${endY - startY}%) scale(0)` }
+        ], {
+          duration: 1000,
+          easing: 'cubic-bezier(0.22, 0.61, 0.36, 1)'
+        });
+        
+        animation.onfinish = () => {
+          particle.remove();
+        };
+      }
+    }
+
+    // Add floating particles to form on focus
+    const formInputs = document.querySelectorAll('input, textarea');
+    formInputs.forEach(input => {
+      input.addEventListener('focus', () => {
+        createFormParticles();
+      });
+    });
+
+    // Initialize scroll animations
+    window.addEventListener('scroll', checkVisibility);
+    window.addEventListener('load', checkVisibility);
+    window.addEventListener('resize', checkVisibility);
+  </script>
 </body>
 </html>
-
-
