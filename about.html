@@ -1,4 +1,4 @@
-     <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -22,6 +22,7 @@
       --transition: all 0.3s ease;
       --radius: 12px;
       --max-width: 1000px;
+      --glow: 0 0 20px rgba(37, 99, 235, 0.3);
     }
 
     /* Dark Theme Variables */
@@ -32,11 +33,12 @@
       --accent: #fb923c;
       --text: #f3f4f6;
       --text-light: #d1d5db;
-      --bg: #111827;
-      --bg-secondary: #1f2937;
+      --bg: #0f172a;
+      --bg-secondary: #1e293b;
       --card-bg: #1a2434;
-      --shadow: rgba(0, 0, 0, 0.25);
-      --shadow-hover: rgba(0, 0, 0, 0.35);
+      --shadow: rgba(0, 0, 0, 0.35);
+      --shadow-hover: rgba(0, 0, 0, 0.45);
+      --glow: 0 0 30px rgba(59, 130, 246, 0.4);
     }
 
     /* Base Styles */
@@ -53,6 +55,34 @@
       background-color: var(--bg);
       transition: var(--transition);
       padding: 2rem 1rem;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Animated Background Elements */
+    .bg-elements {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    .bg-circle {
+      position: absolute;
+      border-radius: 50%;
+      background: radial-gradient(circle, var(--primary), transparent 70%);
+      opacity: 0.05;
+      animation: float 25s infinite linear;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translate(0, 0) rotate(0deg); }
+      25% { transform: translate(20px, -50px) rotate(90deg); }
+      50% { transform: translate(-40px, 30px) rotate(180deg); }
+      75% { transform: translate(30px, 40px) rotate(270deg); }
     }
 
     /* Typography */
@@ -67,12 +97,40 @@
       font-size: 2.5rem;
       text-align: center;
       margin-bottom: 2rem;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      animation: titleGlow 3s ease-in-out infinite alternate;
+    }
+
+    @keyframes titleGlow {
+      0% { filter: drop-shadow(0 0 5px rgba(37, 99, 235, 0.3)); }
+      100% { filter: drop-shadow(0 0 15px rgba(126, 34, 206, 0.5)); }
     }
 
     h2 {
       font-size: 2rem;
       margin-bottom: 1.5rem;
       color: var(--primary);
+      position: relative;
+      display: inline-block;
+    }
+
+    h2:after {
+      content: '';
+      position: absolute;
+      bottom: -8px;
+      left: 0;
+      width: 60px;
+      height: 4px;
+      background: linear-gradient(90deg, var(--primary), var(--accent));
+      border-radius: 2px;
+      transition: width 0.5s ease;
+    }
+
+    h2:hover:after {
+      width: 100%;
     }
 
     h3 {
@@ -117,17 +175,48 @@
       color: white;
       border-radius: var(--radius);
       margin-bottom: 3rem;
+      box-shadow: var(--glow);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .intro:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+      animation: shine 3s infinite;
+    }
+
+    @keyframes shine {
+      0% { left: -100%; }
+      100% { left: 100%; }
     }
 
     .intro h2 {
       color: white;
       font-size: 2.5rem;
+      animation: introText 1s ease-out forwards;
+      opacity: 0;
+      transform: translateY(20px);
+    }
+
+    @keyframes introText {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     .intro p {
       font-size: 1.2rem;
       max-width: 600px;
       margin: 0 auto;
+      opacity: 0;
+      animation: introText 1s ease-out 0.3s forwards;
     }
 
     /* About Section */
@@ -138,11 +227,12 @@
       box-shadow: 0 4px 6px var(--shadow);
       transition: var(--transition);
       margin-bottom: 2rem;
+      border-left: 5px solid var(--primary);
     }
 
     .about-section:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 10px 20px var(--shadow-hover);
+      transform: translateY(-10px) scale(1.01);
+      box-shadow: 0 15px 30px var(--shadow-hover), var(--glow);
     }
 
     /* Profile Image */
@@ -155,11 +245,28 @@
       display: block;
       margin: 0 auto 1rem;
       transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .profile-img:after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 50%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      transition: left 0.7s ease;
+    }
+
+    .profile-img:hover:after {
+      left: 100%;
     }
 
     .profile-img:hover {
-      transform: scale(1.02);
-      box-shadow: 0 12px 24px var(--shadow-hover);
+      transform: scale(1.03);
+      box-shadow: 0 15px 30px var(--shadow-hover), var(--glow);
     }
 
     .img-caption {
@@ -167,6 +274,12 @@
       font-style: italic;
       color: var(--text-light);
       margin-bottom: 2rem;
+      font-size: 0.9rem;
+      padding: 0.5rem;
+      border-radius: var(--radius);
+      background: var(--bg-secondary);
+      max-width: 500px;
+      margin: 0.5rem auto 2rem;
     }
 
     /* Skills Section */
@@ -182,6 +295,29 @@
       border-radius: var(--radius);
       padding: 1.5rem;
       box-shadow: 0 4px 6px var(--shadow);
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .skill-category:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 5px;
+      height: 100%;
+      background: linear-gradient(to bottom, var(--primary), var(--accent));
+      transition: width 0.3s ease;
+    }
+
+    .skill-category:hover:before {
+      width: 10px;
+    }
+
+    .skill-category:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px var(--shadow-hover);
     }
 
     .skill-category h4 {
@@ -202,7 +338,20 @@
       display: flex;
       align-items: center;
       gap: 0.5rem;
+      opacity: 0;
+      transform: translateX(-20px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
     }
+
+    .skill-category:hover .skill-list li {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .skill-category:hover .skill-list li:nth-child(1) { transition-delay: 0.1s; }
+    .skill-category:hover .skill-list li:nth-child(2) { transition-delay: 0.2s; }
+    .skill-category:hover .skill-list li:nth-child(3) { transition-delay: 0.3s; }
+    .skill-category:hover .skill-list li:nth-child(4) { transition-delay: 0.4s; }
 
     .skill-list li:last-child {
       border-bottom: none;
@@ -210,6 +359,11 @@
 
     .skill-list i {
       color: var(--accent);
+      transition: transform 0.3s ease;
+    }
+
+    .skill-list li:hover i {
+      transform: scale(1.2) rotate(10deg);
     }
 
     /* Buttons */
@@ -228,12 +382,31 @@
       align-items: center;
       gap: 0.5rem;
       z-index: 999;
+      overflow: hidden;
+    }
+
+    .toggle-btn:before, .top-btn:before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.2);
+      transform: translate(-50%, -50%);
+      transition: width 0.5s, height 0.5s;
+    }
+
+    .toggle-btn:hover:before, .top-btn:hover:before {
+      width: 300px;
+      height: 300px;
     }
 
     .toggle-btn:hover, .top-btn:hover {
       background: var(--primary-dark);
-      transform: translateY(-2px);
-      box-shadow: 0 6px 12px var(--shadow-hover);
+      transform: translateY(-5px) scale(1.05);
+      box-shadow: 0 8px 15px var(--shadow-hover), var(--glow);
     }
 
     .toggle-btn {
@@ -261,6 +434,18 @@
       color: var(--text-light);
       background: var(--bg-secondary);
       border-radius: var(--radius);
+      position: relative;
+      overflow: hidden;
+    }
+
+    footer:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent));
     }
 
     .social-links {
@@ -274,27 +459,50 @@
       color: var(--text-light);
       font-size: 1.5rem;
       transition: var(--transition);
+      position: relative;
+      width: 50px;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      background: var(--card-bg);
     }
 
     .social-links a:hover {
       color: var(--primary);
+      transform: translateY(-5px) rotate(10deg);
+      box-shadow: 0 5px 15px var(--shadow-hover);
     }
 
     /* Animations */
     @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
+      from { opacity: 0; transform: translateY(30px) scale(0.95); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
     }
 
     .scroll-fade {
       opacity: 0;
-      transform: translateY(20px);
-      transition: opacity 0.6s ease, transform 0.6s ease;
+      transform: translateY(30px) scale(0.95);
+      transition: opacity 0.8s cubic-bezier(0.215, 0.61, 0.355, 1), 
+                  transform 0.8s cubic-bezier(0.215, 0.61, 0.355, 1);
     }
 
     .scroll-fade.visible {
       opacity: 1;
-      transform: translateY(0);
+      transform: translateY(0) scale(1);
+    }
+
+    /* Progress bar for scroll */
+    .scroll-progress {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 0%;
+      height: 4px;
+      background: linear-gradient(90deg, var(--primary), var(--accent));
+      z-index: 1000;
+      transition: width 0.1s ease;
     }
 
     /* Responsive Design */
@@ -331,6 +539,12 @@
   </style>
 </head>
 <body>
+  <!-- Animated Background -->
+  <div class="bg-elements" id="bgElements"></div>
+  
+  <!-- Scroll Progress Bar -->
+  <div class="scroll-progress" id="scrollProgress"></div>
+  
   <div class="container">
     <!-- PAGE HEADING -->
     <header>
@@ -427,6 +641,24 @@
     const darkToggle = document.getElementById('darkToggle');
     const backToTop = document.getElementById('backToTop');
     const scrollElements = document.querySelectorAll('.scroll-fade');
+    const scrollProgress = document.getElementById('scrollProgress');
+    const bgElements = document.getElementById('bgElements');
+    
+    // Create animated background elements
+    function createBgElements() {
+      for (let i = 0; i < 15; i++) {
+        const circle = document.createElement('div');
+        circle.classList.add('bg-circle');
+        const size = Math.random() * 150 + 50;
+        circle.style.width = `${size}px`;
+        circle.style.height = `${size}px`;
+        circle.style.left = `${Math.random() * 100}%`;
+        circle.style.top = `${Math.random() * 100}%`;
+        circle.style.animationDelay = `${Math.random() * 20}s`;
+        circle.style.opacity = Math.random() * 0.1 + 0.03;
+        bgElements.appendChild(circle);
+      }
+    }
     
     // Check for saved theme preference or respect OS preference
     if (localStorage.getItem('theme') === 'dark' || 
@@ -443,14 +675,25 @@
       const currentTheme = document.documentElement.getAttribute('data-theme');
       const newTheme = currentTheme === 'light' ? 'dark' : 'light';
       
-      document.documentElement.setAttribute('data-theme', newTheme);
-      localStorage.setItem('theme', newTheme);
+      // Add transition animation
+      document.body.style.opacity = '0.8';
+      setTimeout(() => {
+        document.documentElement.setAttribute('data-theme', newTheme);
+        localStorage.setItem('theme', newTheme);
+        document.body.style.opacity = '1';
+      }, 300);
       
       darkToggle.textContent = newTheme === 'dark' ? '☀️ Light Mode' : '🌙 Dark Mode';
     });
     
-    // Back to Top Button
+    // Scroll Progress Bar
     window.addEventListener('scroll', () => {
+      const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+      const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      const scrolled = (winScroll / height) * 100;
+      scrollProgress.style.width = scrolled + '%';
+      
+      // Back to top button visibility
       if (window.pageYOffset > 300) {
         backToTop.classList.add('visible');
       } else {
@@ -458,6 +701,7 @@
       }
     });
     
+    // Back to Top Button with smooth scroll
     backToTop.addEventListener('click', () => {
       window.scrollTo({
         top: 0,
@@ -465,43 +709,101 @@
       });
     });
     
-    // Scroll Animations
-    const elementInView = (el, scrollOffset = 0) => {
-      const elementTop = el.getBoundingClientRect().top;
-      return (
-        elementTop <= 
-        ((window.innerHeight || document.documentElement.clientHeight) * (scrollOffset / 100))
-      );
+    // Scroll Animations with Intersection Observer (more efficient)
+    const observerOptions = {
+      root: null,
+      rootMargin: '0px',
+      threshold: 0.15
     };
     
-    const displayScrollElement = (element) => {
-      element.classList.add('visible');
-    };
-    
-    const hideScrollElement = (element) => {
-      element.classList.remove('visible');
-    };
-    
-    const handleScrollAnimation = () => {
-      scrollElements.forEach((el) => {
-        if (elementInView(el, 85)) {
-          displayScrollElement(el);
-        } else {
-          hideScrollElement(el);
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          
+          // Add staggered animation for skills
+          if (entry.target.classList.contains('skill-category')) {
+            const skillItems = entry.target.querySelectorAll('.skill-list li');
+            skillItems.forEach((item, index) => {
+              item.style.transitionDelay = `${index * 0.1}s`;
+              item.style.opacity = '1';
+              item.style.transform = 'translateX(0)';
+            });
+          }
         }
       });
-    };
+    }, observerOptions);
     
-    window.addEventListener('scroll', () => {
-      handleScrollAnimation();
+    // Observe all scroll-fade elements
+    scrollElements.forEach(el => observer.observe(el));
+    
+    // Add hover effect to skill categories
+    const skillCategories = document.querySelectorAll('.skill-category');
+    skillCategories.forEach(category => {
+      category.addEventListener('mouseenter', () => {
+        const skillItems = category.querySelectorAll('.skill-list li');
+        skillItems.forEach((item, index) => {
+          item.style.transitionDelay = `${index * 0.1}s`;
+          item.style.opacity = '1';
+          item.style.transform = 'translateX(0)';
+        });
+      });
+      
+      category.addEventListener('mouseleave', () => {
+        const skillItems = category.querySelectorAll('.skill-list li');
+        skillItems.forEach(item => {
+          item.style.opacity = '0';
+          item.style.transform = 'translateX(-20px)';
+        });
+      });
     });
     
-    // Initialize scroll animations on page load
-    document.addEventListener('DOMContentLoaded', () => {
-      handleScrollAnimation();
+    // Initialize background elements
+    createBgElements();
+    
+    // Add click animation to buttons
+    const buttons = document.querySelectorAll('button');
+    buttons.forEach(button => {
+      button.addEventListener('click', function(e) {
+        // Create ripple effect
+        const ripple = document.createElement('span');
+        const rect = this.getBoundingClientRect();
+        const size = Math.max(rect.width, rect.height);
+        const x = e.clientX - rect.left - size/2;
+        const y = e.clientY - rect.top - size/2;
+        
+        ripple.style.cssText = `
+          position: absolute;
+          border-radius: 50%;
+          background: rgba(255, 255, 255, 0.7);
+          transform: scale(0);
+          animation: ripple-animation 0.6s linear;
+          width: ${size}px;
+          height: ${size}px;
+          top: ${y}px;
+          left: ${x}px;
+        `;
+        
+        this.appendChild(ripple);
+        
+        // Remove ripple after animation
+        setTimeout(() => {
+          ripple.remove();
+        }, 600);
+      });
     });
+    
+    // Add CSS for ripple animation
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes ripple-animation {
+        to {
+          transform: scale(4);
+          opacity: 0;
+        }
+      }
+    `;
+    document.head.appendChild(style);
   </script>
 </body>
 </html>
-
-
